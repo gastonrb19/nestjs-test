@@ -1,31 +1,36 @@
-# Análisis y debug arquitectura
-Parte 2 (análisis y debugging)
+# Analisis arquitectura
+## Arquitectura empleada por capas
+- La arquitectura utilizada es simple y limpia. Común en el desarrollo de api rest con Nestjs.
+Lo cual permite escalar de manera adecuada y a su vez comprender el código.
 
-## Problema número 1
-Falta de constructor en el private orders.
+## Modularidad
+- Nestjs y el modelo empleado por defecto permite ordenar mediante entidades, controladores, servicios y entidades
+Lo cual adecua el proyecto a una arquitectura modular y ordenada.
 
-## Problema número 2
-Poca integridad en los datos ante la falta de un motor de base de datos y herramientas para alojar la información. Ante una eventual excepción no controlada por la aplicación esta puede terminar perdiendo la información recaudada.
+## Dependency injection
+- Como mencione anteriormente el hecho de utilizar modularidad ayuda al orden del proyecto, pero a su vez entrega la capacidad de
+realizar inyección de depedencias. Lo cual nos permite escalabilidad y flexibilidad en el código.
 
-## Problema número 3
-Falta de DTO, lo cual permite envio de información erronea o inadecuada.
+## Capa de servicio
+- Mediante la capa de servicio se permite la reutilización de código, además de evitar el boilerplate, como también
+introducir mayor orden al código.
 
-## Problema número 4
-Capa de controlador inexistente, lo cual conlleva a una baja escabilidad y orden del código. 
+## Decoradores
+- Facilita la lectura del código y a su vez integra funcionalidades.
 
-## Problema número 5
-Falta de manejo ante inmminentes errores, perjudicando el usuario final, ya que aunque nestjs maneje los errores los mensajes no entregaran la claridad esperada.
+## Capa Data transfer object (DTO)
+- La capa mencionada (DTO) facilita la transferencia y limitación de los objetos enviados vía http.
+Ya que, solamente aceptara los campos esperados e ignorará los que no corresponden. 
+Como también asegurara que los tipos de datos sean los correspondientes establecidos
+A esto se le agrega class validator, lo cual acrecenta mediante decoradores la validación de los campos esperados.
 
-## Refactorización del código
-1.- Aplicaria uso de un motor de base de datos, además de un ORM que pueda manejar la transacción de estos datos con el fin de tener integridad en los datos.
+## Capa controlador
+- La capa mencionada establece contacto entre el usuario final que envia la petición http y el servicio.
+Integrando la capa de DTO, lo cual permite como se menciono anteriormente filtrar los datos correspondientes.
+Este controlador se comunica con la capa de servicio, la cual genera una solicitud a la base de datos mediante el entity.
 
-2.- Utilizaría constructores en el servicio detallado con el fin de utilizar la misma clase/objeto instanciado en la transacción y no crear una cantidad inadecuada de instancias que puedan realizar mayor gasto de recursos. 
- 
-3.- Implementaria DTO con el fin de tener claridad y restringir a su vez que no se envien datos erroneos.
+## Posible escalabilidad
+- Además de las capas y filtros mencionados se podrían agregar más funcionalidades que vienen integradas con el framework nestjs.
+- Guards para la autenticación, pipes para la conversión y validación de datos de parametros, como también middlewares para funcionalidades intermediarias entre la solicitud y respuesta http.
 
-4.- Ante cierta falta de contexto entro en la suposición de que no existe una capa de controlador. La cual puede reutilizar, filtrar y entregar una mayor orden al proyecto, el cual al momento de escalar o leer el código facilite las tareas mencionadas.
 
-5.- Manejaría las posibles excepciones que se ven en el código escrito. Ya que ante una posible creación puede existir un error si en la base de datos el registro ya es existente, como también al realizar el update puede que no exista dicho registro. 
-Con el chequeo de este se podría manejar una supuesta excepción, como también ahorrar recursos.
-
-6.- Reutilizaría métodos, crearía un método para chequear si existe un registro mediante el filtro adecuado, el cual posteriormente reutilizaría en la misma clase para ahorrar código y boilerplate
