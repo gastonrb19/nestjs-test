@@ -1,7 +1,5 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { TasksModule } from './tasks/tasks.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
@@ -26,7 +24,5 @@ import { TypeOrmModule } from '@nestjs/typeorm';
     }),
     TasksModule
   ],
-  controllers: [AppController],
-  providers: [AppService],
 })
 export class AppModule {}

@@ -6,6 +6,15 @@ Test Nest.js 06/03/2026
 En el siguiente .md encontraras instrucciones para ejecutar el código.
 
 
+## Documentación
+Se puede revisar la documentación una vez el proyecto esta ejecutandose.
+
+URL
+- /api
+
+Full url
+- localhost:3000/api
+
 Pasos para la ejecución
 - 1.- Correr docker en tu equipo
 - 2.- utilizar el comando de docker para levantar la imágen en la base del proyecto (Revisar docker sección)

@@ -15,19 +15,26 @@ import { CreateDtoTasks } from './dtoTasks/createDtoTasks';
 import { FilterGetDtoTasks } from './dtoTasks/filterGetDtoTasks';
 import { Query } from '@nestjs/common';
 import { UpdateDtoTask } from './dtoTasks/updateDtoTask';
-import { status } from './tasks.enums';
 import { UpdateStatusDtoTask } from './dtoTasks/updateStatusDtoTask';
+import { ApiQuery, ApiTags, ApiParam, ApiBody } from '@nestjs/swagger';
 
 @Controller('tasks')
 export class TasksController {
   constructor(private readonly tasksService: TasksService) {}
 
   @Post()
+  @ApiTags('Tasks')
+  @ApiBody({
+    description: 'The data to create a new task',
+    type: CreateDtoTasks,
+  })
   async createTask(@Body() createDto: CreateDtoTasks): Promise<TasksEntity> {
     return await this.tasksService.createTask(createDto);
   }
 
   @Get()
+  @ApiQuery({ name: 'status', enum: ['pending', 'in_progress', 'done'], required: true })
+  @ApiQuery({ name: 'priority', enum: ['low', 'medium', 'high'], required: true })  
   async getTasks(
     @Query() filterDto: FilterGetDtoTasks,
   ): Promise<TasksEntity[]> {
@@ -60,6 +67,8 @@ export class TasksController {
     }
    */
   @Patch('/:id')
+  @ApiTags('Tasks')
+  @ApiParam({ name: 'id', description: 'The ID of the task to update' })
   async updateTask(
     @Param('id') id: number,
     @Body('update_task') updateDto: UpdateDtoTask,
@@ -82,6 +91,12 @@ export class TasksController {
     }
    */
   @Patch('/status/:id')
+  @ApiTags('Tasks')
+  @ApiParam({ name: 'id', description: 'The ID of the task to update the status' })
+  @ApiBody({
+    description: 'The new status of the task',
+    type: UpdateStatusDtoTask,
+  })
   async updateStatusTask(
     @Param('id') id: number,
     @Body('status') status: UpdateStatusDtoTask,
@@ -96,6 +111,8 @@ export class TasksController {
   }
 
   @Delete('/:id')
+  @ApiTags('Tasks')
+  @ApiParam({ name: 'id', description: 'The ID of the task to delete' })
   async deleteTask(@Param('id') id: number): Promise<void> {
     return await this.tasksService.deleteTask(id);
   }

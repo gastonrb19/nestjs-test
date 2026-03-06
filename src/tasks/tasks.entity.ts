@@ -19,7 +19,6 @@ export default class TasksEntity {
   description?: string;
 
   @Column({ nullable: false, type: 'enum', enum: status })
-
   status: status;
 
   @Column({
